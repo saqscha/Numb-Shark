@@ -1,4 +1,3 @@
-from mimetypes import add_type
 import tkinter as tk
 from tkinter import ttk
 import os.path
@@ -31,9 +30,35 @@ class App(ttk.Frame):
             self.button_int2 = 0
 
         # Create widgets :)
-        self.setup_widgets()
+        self.createFrames()
+        self.createLevelButtons()
+        self.createScoreEntry()
+        self.createQuitRestartButton()
+        self.createSeperator()
+        self.createLabelUsername()
+        self.createThemeSwitch()
+        self.createEndScreen()
+        self.createSizeGrip()
+        
 
-    def setup_widgets(self):
+    def createFrames(self):
+        # create a Frame for the Score
+        self.Score_frame = ttk.LabelFrame(self, text='Score', padding=(20, 10))
+        self.Score_frame.grid(
+            row=2, column=1, padx=(20, 10), pady=(20, 10), sticky='nsew'
+        )
+        # create a Frame for the config
+        self.config_frame = ttk.LabelFrame(
+            self, text='Preferences', padding=(20, 10))
+        self.config_frame.grid(
+            row=2, column=2, padx=(20, 10), pady=(20, 10), sticky='nsew'
+        )
+        # create Frame for playground
+        self.playground_frame = ttk.LabelFrame(
+            self, text='Playground', padding=(20, 10))
+        self.playground_frame.grid(
+            row=0, column=0, columnspan=3, padx=(20, 10), pady=(20, 10), sticky='nsew'
+        )
         # create a Frame for the Levelbuttons
         self.levelbtn_Frame = ttk.LabelFrame(
             self, text='choose a Level', padding=(20, 10))
@@ -41,8 +66,7 @@ class App(ttk.Frame):
             row=2, column=0, padx=(20, 10), pady=(20, 10), sticky="nsew"
         )
 
-        # create the Levelbuttons
-
+    def createLevelButtons(self):
         self.firstbtn = ttk.Radiobutton(self.levelbtn_Frame, text='Level 1',
                                         value=1, variable=self.level_val, command=self.destroyPlayground)
         self.firstbtn.grid(row=0, column=0, padx=(
@@ -56,12 +80,8 @@ class App(ttk.Frame):
         self.thirdbtn.grid(row=2, column=0, padx=(
             20, 10), pady=10, sticky="nsew")
 
-        # create a Frame for the Score
-        self.Score_frame = ttk.LabelFrame(self, text='Score', padding=(20, 10))
-        self.Score_frame.grid(
-            row=2, column=1, padx=(20, 10), pady=(20, 10), sticky='nsew'
-        )
-
+    
+    def createScoreEntry(self):
         # create Playerscore Entry
         self.Player_entry = ttk.Entry(self.Score_frame)
         self.Player_entry.insert(0, self.playerNameScore)
@@ -69,7 +89,6 @@ class App(ttk.Frame):
             row=0, column=0, padx=5, pady=(0, 10), sticky="e"
         )
         self.Player_entry.configure(state='readonly')
-
         # create Sharkscore Entry
         self.Shark_entry = ttk.Entry(self.Score_frame,)
         self.Shark_entry.insert(0, self.sharkNameScore)
@@ -78,77 +97,57 @@ class App(ttk.Frame):
         )
         self.Shark_entry.configure(state='readonly')
 
-        # create Frame for playground
-        self.playground_frame = ttk.LabelFrame(
-            self, text='Playground', padding=(20, 10))
-        self.playground_frame.grid(
-            row=0, column=0, columnspan=3, padx=(20, 10), pady=(20, 10), sticky='nsew'
-        )
-
-        # create playground
-        self.createPlayground()
-
-        # Separator
-        self.separator2 = ttk.Separator(self)
-        self.separator2.grid(row=1, column=0, columnspan=3,
-                             padx=(20, 10), pady=10, sticky="ew")
-
-        # create a Frame for the config
-        self.config_frame = ttk.LabelFrame(
-            self, text='Preferences', padding=(20, 10))
-        self.config_frame.grid(
-            row=2, column=2, padx=(20, 10), pady=(20, 10), sticky='nsew'
-        )
-
-        # Label
-        self.namelabel = ttk.Label(
-            self.config_frame,
-            text="Your nickname",
-            justify="center",
-            font=("-size", 12, "-weight", "bold"),
-        )
-        self.namelabel.grid(row=0, column=0, pady=10, columnspan=2)
-
-        # create playername entry
-        self.pName_entry = ttk.Entry(self.config_frame,)
-        self.pName_entry.insert(0, self.playerName)
-        self.pName_entry.grid(
-            row=1, column=0, padx=5, pady=(0, 10), sticky="ew"
-        )
-        self.pName_entry.bind('<Return>', self.updateName)
-
-        # crate switch for theme mode
-        self.apperanceSwitch = ttk.Checkbutton(
-            self.config_frame, text='Lightmode', style='Switch.TCheckbutton', command=self.apperance
-        )
-        self.apperanceSwitch.grid(
-            row=2, column=0, padx=5, pady=10, sticky="nsew")
-
+    def createQuitRestartButton(self):
         # create Quit-Button
         self.quit_button = ttk.Button(
             self.config_frame, text='EXIT', style='Accent.TButton', command=self.quit
         )
         self.quit_button.grid(row=3, column=0, padx=5, pady=5, sticky='nsew')
 
+    def createSeperator(self):
+        # Separator
+        self.separator2 = ttk.Separator(self)
+        self.separator2.grid(row=1, column=0, columnspan=3,
+                             padx=(20, 10), pady=10, sticky="ew")
+
+    def createLabelUsername(self):
+        # Label
+        self.namelabel = ttk.Label(
+            self.config_frame,
+            text="Your nickname",
+            justify="center",
+            font=("-size", 12, "-weight", "bold")
+            )
+        self.namelabel.grid(row=0, column=0, pady=10, columnspan=2)
+
+        # create playername entry
+        self.pName_entry = ttk.Entry(self.config_frame,)
+        self.pName_entry.insert(0, self.playerName)
+        self.pName_entry.grid(
+            row=1, column=0, padx=5, pady=(0, 10), sticky="ew")
+        self.pName_entry.bind('<Return>', self.updateName)
+
+    def createThemeSwitch(self):
+        # crate switch for theme mode
+        self.apperanceSwitch = ttk.Checkbutton(
+            self.config_frame, text='Lightmode', style='Switch.TCheckbutton', command=self.apperance
+        )
+        self.apperanceSwitch.grid(
+            row=2, column=0, padx=5, pady=10, sticky="nsew")
+    
+    def createEndScreen(self):
         # create Label win/lose screen
         self.label_ = ttk.Label(
             self,
             text='test',
             justify='center',
-            font=("-size", 15, "-weight", "bold"),
-        )
-
+            font=("-size", 15, "-weight", "bold")
+            )
         
-
-
-
-
+    def createSizeGrip(self):
         # Sizegrip
         self.sizegrip = ttk.Sizegrip(self)
         self.sizegrip.grid(row=100, column=100, padx=(0, 5), pady=(0, 5))
-
-
-
 
 
 
